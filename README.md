@@ -39,8 +39,8 @@ DELETE / - Delete data.
 ```
 
 ## Database
-The database used for this project is [PostgresSQL](https://www.postgresql.org/download/).
-The necessary database migrations are managed using Flyway.
+The database used for this project is [PostgresSQL](https://www.postgresql.org/download/) running on [Docker](https://www.docker.com/).
+The necessary database migrations are managed using [Flyway](https://flywaydb.org/).
 
 ## ✉ Contact
 
