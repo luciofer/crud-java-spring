@@ -7,9 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class ResponseProductDTO {
     String id;
+
     String name;
 
     Integer price_in_cents;
-
-
 }

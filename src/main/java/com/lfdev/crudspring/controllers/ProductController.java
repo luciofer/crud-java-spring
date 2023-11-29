@@ -7,6 +7,7 @@ import com.lfdev.crudspring.domain.product.RequestProductDTO;
 import com.lfdev.crudspring.domain.product.ResponseProductDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +22,14 @@ public class ProductController {
     @GetMapping("/")
     public ResponseEntity<Object> getProducts(){
         var allProducts = productRepository.findAll();
-        return ResponseEntity.ok().body(allProducts);
+        return ResponseEntity.status(HttpStatus.OK).body(allProducts);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Object> ResponseEntity (@RequestBody @Valid RequestProductDTO requestProductDTO){
+    public ResponseEntity<Object> create(@RequestBody @Valid RequestProductDTO requestProductDTO){
         ProductEntity product = new ProductEntity(requestProductDTO);
         this.productRepository.save(product);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
     @PutMapping("/")
@@ -43,11 +44,24 @@ public class ProductController {
 
             var updatedProduct = this.productRepository.save(product);
 
-            return ResponseEntity.ok().body(updatedProduct);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
         }
 
-        return ResponseEntity.badRequest().body("id not found");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id not found");
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable String id){
+
+        var product = this.productRepository.findById(id).orElse(null);
+
+        if (product == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product not found");
+        }
+
+        this.productRepository.delete(product);
+        return ResponseEntity.status(HttpStatus.OK).body("Product deleted successfully");
+
+    }
 
 }
